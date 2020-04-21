@@ -109,7 +109,7 @@ model {
 doxygen {
     description = 'Generate documentation'
 
-    project_name 'FullTrajGen'
+    project_name 'TrajGen'
 
     generate_html true
     generate_latex false
