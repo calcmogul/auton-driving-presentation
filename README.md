@@ -33,3 +33,9 @@ elevators and flywheels too). The feedforward gains were converted into a
 simulated drivetrain model using the state-space modeling library in
 [this fork of WPILib](https://github.com/mcm001/allwpilib/tree/state-space-v2).
 It's being prepped for inclusion in WPILib 2021.
+
+If any FIRST robotics team members have questions on the material referenced
+here or need help applying it, feel free to ask on the
+[FRC Discord](https://discord.gg/frc) in one of the programming channels.
+Several WPILib contributors are fairly active there, and complex topics are
+easier to teach when there's a feedback loop. :)
