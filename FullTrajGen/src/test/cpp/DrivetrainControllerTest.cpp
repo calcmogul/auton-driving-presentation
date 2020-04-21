@@ -100,9 +100,9 @@ TEST(DrivetrainControllerTest, ReachesReference) {
     // Robot mock objects
     frc::RunHALInitialization();
     Robot robot;
-    frc::sim::AnalogGyroSim simGyro{1};
-    frc::sim::EncoderSim simLeftEncoder{1};
-    frc::sim::EncoderSim simRightEncoder{2};
+    frc::sim::AnalogGyroSim simGyro{Constants::Drivetrain::kGyroPort};
+    frc::sim::EncoderSim simLeftEncoder{0};
+    frc::sim::EncoderSim simRightEncoder{1};
     frc::sim::PWMSim simLeftMotor{Constants::Drivetrain::kLeftMotor};
     frc::sim::PWMSim simRightMotor{Constants::Drivetrain::kRightMotor};
 
@@ -135,17 +135,23 @@ TEST(DrivetrainControllerTest, ReachesReference) {
         }
 
         // Set sensors based on simulation output vector
-        auto heading = units::radian_t{y(0)};
+        auto heading = units::radian_t{y(LocalOutput::kHeading)};
         simGyro.SetAngle(units::degree_t{heading}.to<double>());
-        simLeftEncoder.SetCount(y(1) / Constants::Drivetrain::kDpP);
-        simRightEncoder.SetCount(y(2) / Constants::Drivetrain::kDpP);
+        robot.m_leftEncoder.SetCount(y(LocalOutput::kLeftPosition) /
+                                     Constants::Drivetrain::kDpP);
+        robot.m_leftEncoder.SetRate(x(State::kLeftVelocity) /
+                                    Constants::Drivetrain::kDpP);
+        robot.m_rightEncoder.SetCount(y(LocalOutput::kRightPosition) /
+                                      Constants::Drivetrain::kDpP);
+        robot.m_rightEncoder.SetRate(x(State::kRightVelocity) /
+                                     Constants::Drivetrain::kDpP);
 
         robot.AutonomousPeriodic();
         currentTime += dt;
 
         // Get control inputs for sim
-        u = frc::MakeMatrix<2, 1>(simLeftMotor.GetSpeed() * 12.0,
-                                  simRightMotor.GetSpeed() * 12.0);
+        u = frc::MakeMatrix<2, 1>(robot.m_leftMotor.Get() * 12.0,
+                                  robot.m_rightMotor.Get() * 12.0);
 
         // Account for battery voltage drop due to current draw
         if constexpr (!kIdealModel) {

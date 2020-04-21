@@ -19,6 +19,7 @@
 #include <frc2/Timer.h>
 
 #include "Constants.hpp"
+#include "Encoder.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -34,18 +35,19 @@ public:
 
     frc::TrajectoryConfig MakeTrajectoryConfig() const;
 
-private:
-    // Sensors
-    frc::Encoder m_leftEncoder{Constants::Drivetrain::kLeftEncoderA,
-                               Constants::Drivetrain::kLeftEncoderB};
-    frc::Encoder m_rightEncoder{Constants::Drivetrain::kRightEncoderA,
-                                Constants::Drivetrain::kRightEncoderB};
-    // AnalogGyro instead of ADXRS450 for ease of simulation
-    frc::AnalogGyro m_gyro{Constants::Drivetrain::kGyroPort};
+    // Drivetrain encoders
+    Encoder m_leftEncoder{Constants::Drivetrain::kLeftEncoderA,
+                          Constants::Drivetrain::kLeftEncoderB};
+    Encoder m_rightEncoder{Constants::Drivetrain::kRightEncoderA,
+                           Constants::Drivetrain::kRightEncoderB};
 
     // Motors
     frc::PWMVictorSPX m_leftMotor{Constants::Drivetrain::kLeftMotor};
     frc::PWMVictorSPX m_rightMotor{Constants::Drivetrain::kRightMotor};
+
+private:
+    // AnalogGyro instead of ADXRS450 for ease of simulation
+    frc::AnalogGyro m_gyro{Constants::Drivetrain::kGyroPort};
 
     // Localization
     frc::DifferentialDriveKinematics m_kinematics{
@@ -64,10 +66,8 @@ private:
     frc::RamseteController m_ramsete;
     frc::LinearQuadraticRegulator<2, 2> m_lqr{
         m_plant, {0.95, 0.95}, {12.0, 12.0}, Constants::kDt};
-    frc2::PIDController m_leftPID{m_lqr.K(0, 0), 0.0, m_lqr.K(1, 1),
-                                  Constants::kDt};
-    frc2::PIDController m_rightPID{m_lqr.K(0, 0), 0.0, m_lqr.K(1, 1),
-                                   Constants::kDt};
+    frc2::PIDController m_leftPID{m_lqr.K(0, 0), 0.0, 0.0, Constants::kDt};
+    frc2::PIDController m_rightPID{m_lqr.K(1, 1), 0.0, 0.0, Constants::kDt};
 
     // Autonomous variables
     frc::Trajectory m_trajectory;

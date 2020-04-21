@@ -6,6 +6,9 @@
 #include <frc/trajectory/constraint/DrivetrainVelocitySystemConstraint.h>
 
 Robot::Robot() {
+    m_leftEncoder.SetSamplesToAverage(10);
+    m_rightEncoder.SetSamplesToAverage(10);
+
     m_leftEncoder.SetDistancePerPulse(Constants::Drivetrain::kDpP);
     m_rightEncoder.SetDistancePerPulse(Constants::Drivetrain::kDpP);
 }
@@ -34,9 +37,11 @@ void Robot::AutonomousPeriodic() {
         ref.pose.Translation().Y().to<double>(), m_leftEncoder.GetDistance(),
         m_rightEncoder.GetDistance());
 
-    angleLogger.Log(m_timer.Get(), m_gyro.GetAngle(),
-                    m_odometry.GetPose().Rotation().Radians().to<double>(),
-                    ref.pose.Rotation().Radians().to<double>());
+    angleLogger.Log(
+        m_timer.Get(),
+        units::radian_t{units::degree_t{m_gyro.GetAngle()}}.to<double>(),
+        m_odometry.GetPose().Rotation().Radians().to<double>(),
+        ref.pose.Rotation().Radians().to<double>());
     velocityLogger.Log(m_timer.Get(), m_leftEncoder.GetRate(),
                        m_rightEncoder.GetRate(), vlRef.to<double>(),
                        vrRef.to<double>());
@@ -46,6 +51,12 @@ void Robot::AutonomousPeriodic() {
 
     auto chassisSpeeds = m_ramsete.Calculate(m_odometry.GetPose(), ref);
     auto [vl, vr] = m_kinematics.ToWheelSpeeds(chassisSpeeds);
+    if (units::math::abs(vl) > Constants::Drivetrain::kMaxV ||
+        units::math::abs(vr) > Constants::Drivetrain::kMaxV) {
+        auto maxV = units::math::max(vl, vr);
+        vl = vl / (maxV / Constants::Drivetrain::kMaxV);
+        vr = vr / (maxV / Constants::Drivetrain::kMaxV);
+    }
 
     m_leftMotor.Set(
         m_leftPID.Calculate(m_leftEncoder.GetRate(), vl.to<double>()));
