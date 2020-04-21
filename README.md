@@ -12,8 +12,24 @@ you are), motion planning (planning a way to get where you want to go), and
 control (actually getting there). Then, these concepts will be implemented and
 simulated against a realistic mathematical model of FRC team 3512's 2020 robot.
 
-## Lay out traj gen presentation
+## Resources
 
-Yes. I'll work on an end-to-end presentation for trajectory tracking. It'll give an overview of the different aspects required like odometry (knowing where you are relative to where you want to go), trajectory generation (planning a way to get there), and control (actually getting there). I can modify my FRC team's drivetrain sim backend for a demo, since I don't have access to a robot and that model proved very accurate.
+WPILib's documentation and tutorials can be found at
+[docs.wpilib.org](https://docs.wpilib.org). The
+[trajectory tutorial](https://docs.wpilib.org/en/latest/docs/software/examples-tutorials/trajectory-tutorial/index.html)
+walks through implementing all of the topics mentioned in the presentation.
 
-I haven't given live lectures in a while, so my time estimation skills are rusty. Showing just plugging the library pieces together would be about half an hour of content, if I prepare all the steps I need to reduce mistakes on-the-fly. It might feel a bit rushed, but I won't know until I have the presentation together. Hour timeslot, perhaps? I can give you a better estimate later today.
+For a deeper dive into some of the math from the presentation, refer to the
+relevant section in
+[Controls Engineering in FRC](https://github.com/calcmogul/controls-engineering-in-frc) (the topics discussed roughly map to the parts listed in the table of
+contents).
+
+The unit test presented from FRC team 3512's 2020 robot code is
+[here](https://github.com/frc3512/Robot-2020/blob/master/src/test/cpp/DrivetrainControllerTest.cpp).
+
+[FRC Characterization](https://github.com/wpilibsuite/frc-characterization) was
+used to obtain feedforward gains for the drivetrain (it supports mechanisms like
+elevators and flywheels too). The feedforward gains were converted into a
+simulated drivetrain model using the state-space modeling library in
+[this fork of WPILib](https://github.com/mcm001/allwpilib/tree/state-space-v2).
+It's being prepped for inclusion in WPILib 2021.
