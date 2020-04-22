@@ -19,10 +19,13 @@ WPILib's documentation and tutorials can be found at
 [trajectory tutorial](https://docs.wpilib.org/en/latest/docs/software/examples-tutorials/trajectory-tutorial/index.html)
 walks through implementing all of the topics mentioned in the presentation.
 
-For a deeper dive into some of the math from the presentation, refer to the
-relevant section in
-[Controls Engineering in FRC](https://github.com/calcmogul/controls-engineering-in-frc) (the topics discussed roughly map to the parts listed in the table of
-contents).
+Refer to the relevant section in
+[Controls Engineering in FRC](https://github.com/calcmogul/controls-engineering-in-frc)
+for a deeper dive into the math from the presentation. The topics discussed
+roughly map to the parts listed in the table of contents. 3blue1brown's
+[Essence of Linear Algebra](https://www.3blue1brown.com/essence-of-linear-algebra-page/)
+video series will help provide geometric intuition for the linear algebra
+presented.
 
 The unit test presented from FRC team 3512's 2020 robot code is
 [here](https://github.com/frc3512/Robot-2020/blob/master/src/test/cpp/DrivetrainControllerTest.cpp).
