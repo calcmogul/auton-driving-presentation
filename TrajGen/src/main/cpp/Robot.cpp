@@ -30,13 +30,13 @@ void Robot::AutonomousPeriodic() {
 
     auto [vlRef, vrRef] = m_kinematics.ToWheelSpeeds(
         {ref.velocity, 0_mps, ref.velocity * ref.curvature});
+
     positionLogger.Log(
         m_timer.Get(), m_odometry.GetPose().Translation().X().to<double>(),
         m_odometry.GetPose().Translation().Y().to<double>(),
         ref.pose.Translation().X().to<double>(),
         ref.pose.Translation().Y().to<double>(), m_leftEncoder.GetDistance(),
         m_rightEncoder.GetDistance());
-
     angleLogger.Log(
         m_timer.Get(),
         units::radian_t{units::degree_t{m_gyro.GetAngle()}}.to<double>(),
@@ -51,17 +51,23 @@ void Robot::AutonomousPeriodic() {
 
     auto chassisSpeeds = m_ramsete.Calculate(m_odometry.GetPose(), ref);
     auto [vl, vr] = m_kinematics.ToWheelSpeeds(chassisSpeeds);
-    if (units::math::abs(vl) > Constants::Drivetrain::kMaxV ||
-        units::math::abs(vr) > Constants::Drivetrain::kMaxV) {
-        auto maxV = units::math::max(vl, vr);
-        vl = vl / (maxV / Constants::Drivetrain::kMaxV);
-        vr = vr / (maxV / Constants::Drivetrain::kMaxV);
+
+    double leftVoltage =
+        m_leftPID.Calculate(m_leftEncoder.GetRate(), vl.to<double>());
+    double rightVoltage =
+        m_rightPID.Calculate(m_rightEncoder.GetRate(), vr.to<double>());
+
+    // If either voltage is outside the battery voltage, normalize them while
+    // maintaining the curvature.
+    if (std::abs(leftVoltage) > 12.0 || std::abs(rightVoltage) > 12.0) {
+        double maxVoltage =
+            std::max(std::abs(leftVoltage), std::abs(rightVoltage));
+        leftVoltage *= 12.0 / maxVoltage;
+        rightVoltage *= 12.0 / maxVoltage;
     }
 
-    m_leftMotor.Set(
-        m_leftPID.Calculate(m_leftEncoder.GetRate(), vl.to<double>()));
-    m_rightMotor.Set(
-        m_rightPID.Calculate(m_rightEncoder.GetRate(), vr.to<double>()));
+    m_leftMotor.Set(leftVoltage);
+    m_rightMotor.Set(rightVoltage);
 }
 
 bool Robot::AtReference() const { return m_ramsete.AtReference(); }

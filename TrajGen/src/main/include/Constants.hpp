@@ -50,8 +50,8 @@ constexpr decltype(1_V / 1_mps_sq) kLinearA = 0.642_V / 1_mps_sq;
 constexpr decltype(1_V / 1_rad_per_s) kAngularV = 1.382_V / 1_rad_per_s;
 constexpr decltype(1_V / (1_rad_per_s / 1_s)) kAngularA =
     (0.3398_V / 4.0) / (1_rad_per_s / 1_s);
-constexpr decltype(1_V / (1_V / 1_mps)) kMaxV = 12_V / kLinearV;
-constexpr decltype(1_V / (1_V / 1_mps_sq)) kMaxA = 12_V / kLinearA;
+constexpr units::meters_per_second_t kMaxV = 12_V / kLinearV;
+constexpr decltype(1_mps_sq) kMaxA = 12_V / kLinearA;
 }  // namespace Drivetrain
 
 constexpr auto kDt = 5_ms;

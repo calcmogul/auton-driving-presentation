@@ -6,7 +6,9 @@ class Encoder {
 public:
     Encoder(int channelA, int channelB) {}
 
-    void SetDistancePerPulse(double distancePerPulse) {}
+    void SetDistancePerPulse(double distancePerPulse) {
+        m_distancePerPulse = distancePerPulse;
+    }
 
     double GetDistance() const { return m_count * m_distancePerPulse; }
 
