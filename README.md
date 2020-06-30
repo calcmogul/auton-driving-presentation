@@ -12,6 +12,9 @@ you are), motion planning (planning a way to get where you want to go), and
 control (actually getting there). Then, these concepts will be implemented and
 simulated against a realistic mathematical model of FRC team 3512's 2020 robot.
 
+A recording of the presentation given on 2020-04-21 is available
+[here](https://www.youtube.com/watch?v=V_LLMIsUgTQ).
+
 ## Resources
 
 WPILib's documentation and tutorials can be found at
