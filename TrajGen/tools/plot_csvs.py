@@ -1,11 +1,12 @@
-#!/usr/bin/env python3
-"""Finds latest versions of the CSVs for each subsystem, then plots the data.
+#!/usr/bin/env python
+
+"""
+Finds latest versions of the CSVs for each subsystem, then plots the data.
 
 If provided, the first argument to this script is a filename regex that
 restricts which CSVs are plotted to those that match the regex.
 """
 
-import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import os

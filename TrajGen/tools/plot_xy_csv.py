@@ -1,5 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
 """Finds latest versions of the CSVs for each subsystem, then plots the data."""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os

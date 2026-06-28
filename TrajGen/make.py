@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import argparse
 import multiprocessing as mp
 import os
-from pathlib import Path
 import re
 import requests
 import subprocess
