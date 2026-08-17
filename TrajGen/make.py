@@ -59,9 +59,9 @@ def scrub_make_dep_rules():
 def download_file(maven_url, filename, dest_dir):
     """Download file from maven server.
 
-    Keyword arguments:
-    filename -- file to download
-    dest_dir -- destination directory for file
+    Args:
+        filename: File to download.
+        dest_dir: Destination directory for file.
     """
     dest_file = f"{dest_dir}/{filename}"
     if not os.path.exists(dest_file):
